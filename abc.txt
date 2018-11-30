@@ -1,0 +1,55 @@
+1 Write a Ansible Adhoc Commands to create a group called “deploy”
+
+-ansible 127.0.0.1 -m group -a "name=deploy"
+-ansible all -i 13.232.187.199, -m group -a "name=deploy"  --key-file=remote.pem -u ec2-user -b
+-ansible WEB -i inventory -m group -a "name=deploy"  --key-file=remote.pem -u ec2-user -b
+
+2 Write a Ansible Adhoc Commands to create a user called “deploy-user” which is part of group called “group” and with /bin/bash shell.
+
+-ansible 127.0.0.1 -m user -a "name=deploy-user group=deploy shell=/bin/bash"
+-ansible all -i 13.232.187.199, -m user -a "name=deploy-user group=group shell=/bin/bash"  --key-file=remote.pem -u ec2-user -b
+-ansible WEB -i inventory -m user -a "name=deploy-user group=group shell=/bin/bash"  --key-file=remote.pem -u ec2-user -b
+
+3 Write a Ansble Adhoc commands install package named “httpd” in RHEL/centos.
+
+-ansible 127.0.0.1 -m yum -a "name=httpd state=present"
+-ansible all -i 13.232.187.199, -m yum -a "name=httpd state=present"  --key-file=remote.pem -u ec2-user -b
+-ansible WEB -i inventory -m user -a "name=deploy-user group=group shell=/bin/bash"  --key-file=remote.pem -u ec2-user -b
+
+4 Write a Ansible Adhoc commands to start and enable the service named “httpd”
+
+-ansible 127.0.0.1 -m service -a "name=httpd state=started"
+-ansible all -i 13.232.187.199, -m service -a "name=httpd state=started"  --key-file=remote.pem -u ec2-user -b
+-ansible WEB -i inventory -m service -a "name=httpd state=started"  --key-file=remote.pem -u ec2-user -b
+
+5 Write a Ansible commands to create a file called “index.html” in /var/www/html with some dummy html contents.
+
+-ansible 127.0.0.1 -m file -a "dest=/var/www/html/index.html mode=777 state=touch"
+-ansible 127.0.0.1 -m blockinfile -a "path=/var/www/html/index.html content=hello"
+
+-ansible 127.0.0.1 -m blockinfile -a "create=yes dest=/var/www/html/index.html block=srinivas"
+-ansible all -i 13.232.187.199, -m blockinfile -a "create=yes dest=/var/www/html/index.html block=ayush"  --key-file=remote.pem -u ec2-user -b
+-ansible WEB -i inventory -m blockinfile -a "create=yes dest=/var/www/html/index.html block=ayush"  --key-file=remote.pem -u ec2-user -b
+
+6 Write a Ansible commands to reboot a self machine.
+
+-ansible 127.0.0.1 -m reboot
+-ansible all -i 13.232.187.199, -m reboot  --key-file=remote.pem -u ec2-user -b
+-ansible Web -i inventory -m reboot  --key-file=remote.pem -u ec2-user -b
+
+7 Write a Ansible commands to install a package called “git”, “wget”.
+
+-ansible 127.0.0.1 -m yum -a "name=git state=present"
+-ansible 127.0.0.1 -m yum -a "name=wget state=present"
+-ansible all -i 13.232.187.199, -m yum -a "name=git state=present"  --key-file=remote.pem -u ec2-user -b
+-ansible all -i 13.232.187.199, -m yum -a "name=wget state=present"  --key-file=remote.pem -u ec2-user -b
+-ansible WEB -i inventory -m yum -a "name=git state=present"  --key-file=remote.pem -u ec2-user -b
+-ansible WEB -i inventory -m yum -a "name=wget state=present"  --key-file=remote.pem -u ec2-user -b
+
+8 Write a Ansible Adhoc commands to clone git repo. thttps://github.com/scmgalaxy/ansible-role-template
+
+-ansible 127.0.0.1 -m git -a "name=https://github.com/scmgalaxy/ansible-role-template dest=/opt/ clone=yes"
+-ansible all -i 13.232.187.199, -m git -a "name=https://github.com/scmgalaxy/ansible-role-template dest=/opt/ clone=yes"  --key-file=remote.pem -u ec2-user -b
+-ansible WEB -i inventory -m git -a "name=https://github.com/scmgalaxy/ansible-role-template dest=/opt/ clone=yes"  --key-file=remote.pem -u ec2-user -b
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+

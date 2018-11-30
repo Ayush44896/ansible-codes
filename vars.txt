@@ -1,0 +1,96 @@
+1)
+Content of playbook
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    yum: name={{web_server}} state=present
+  - name: Start Apache Services
+    service: name={{web_server}} enabled=yes state=started
+...
+Content of Host_vars
+web_server: httpd
+
+--------------------------------------------------------------
+
+2)
+Content of playbook
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    yum: name={{web_server2}} state=present
+  - name: Start Apache Services
+    service: name={{web_server2}} enabled=yes state=started
+...
+Content of Group_vars
+web_server2: httpd
+
+--------------------------------------------------------------
+
+4)
+Content of playbook
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    yum: name={{web_server3}} state=present
+  - name: Start Apache Services
+    service: name={{web_server3}} enabled=yes state=started
+...
+Content of Inventory
+[web]
+hostname
+
+[web:vars]
+web_server3=httpd
+
+--------------------------------------------------------------------
+
+5)
+Content of playbook
+---
+- hosts: all
+  sudo: yes
+
+  vars: 
+    web_server4: httpd
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    yum: name={{web_server4}} state=present
+  - name: Start Apache Services
+    service: name={{web_server4}} enabled=yes state=started
+...
+
+-------------------------------------------------------------------
+
+6)
+Content of playbook
+---
+- hosts: all
+  sudo: yes
+
+  vars_files: 
+    ansible/varsfile
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    yum: name={{web_server5}} state=present
+  - name: Start Apache Services
+    service: name={{web_server5}} enabled=yes state=started
+...
+Content of External File
+web_server5: httpd

@@ -1,0 +1,322 @@
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name:  group called “deploy”
+    group: name=deploy
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name:  group called “group”
+    group: name=group
+  - name: Start Apache Services
+    user: name=deploy-user group=group shell=/bin/bash
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    yum: name=httpd state=present
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Start Apache Services
+    service: name=httpd enabled=yes state=started
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Create index.html
+    file: dest=/var/www/html/index.html mode=777 state=touch
+  - name: Add content
+    blockinfile: path=/var/www/html/index.html content=hello
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Reboot Server
+    command: systemctlreboot
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Install Git
+    yum: name=git state=present
+  - name: Install Wget
+    yum: name=wget state=present
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    git: name=https://github.com/scmgalaxy/ansible-role-template dest=/opt1/ clone=yes
+...
+
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: "ls centos"
+    command: ls
+    when: ansible_os_family == "CentOS"
+...
+
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: "ls centos"
+    command: ls
+    when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") or
+              (ansible_distribution == "Debian" and ansible_distribution_major_version == "7")
+...
+
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+    - name: "shut down CentOS 6 systems"
+      command: touch /opt/verizon.txt
+      when:
+        - ansible_distribution == "RedHat"
+        - ansible_distribution_major_version == "7.5"
+...
+
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+    - shell: echo "I've got '{{ foo }}' and am not afraid to use it!"
+      when: foo is defined
+    
+    - fail: msg="Bailing out. this play requires 'bar'"
+      when: bar is undefined
+...
+
+---
+- hosts: all
+  sudo: yes
+
+  vars:
+    test1: "Hello World"
+
+  tasks:
+    - name: Ansible when variable equals example
+      debug:
+        msg: "Equals"
+        when: test1 == "Hello World"
+...
+
+---
+- hosts: all
+  sudo: yes
+
+  vars:
+    test1: "Hello World"
+
+  tasks:
+    - name: Install common software requirements
+      yum: name={{ item }} state=present
+      with_items:
+        - git
+        - wget
+        - vim
+
+- hosts: all
+  sudo: yes
+
+  vars:
+    test1: "Hello World"
+
+  tasks:
+    - command: echo {{ item }}
+      loop: [ 0, 2, 4, 6, 8, 10 ]
+      when: item > 5
+
+- hosts: all
+  sudo: yes
+
+  vars:
+    test1: "Hello World"
+
+  tasks:
+    - command: echo {{ item }}
+      loop: "{{ mylist|default([]) }}"
+      when: item > 5
+
+- hosts: all
+  sudo: yes
+
+  vars:
+    test1: "Hello World"
+
+  tasks:
+    - name: Remove users ?Chuck? and ?Craig? from the system.
+      user:
+        name: "{{ item }}"
+        state: absent
+        remove: yes
+      with_items:
+        - chuck
+        - craig
+
+- hosts: all
+  sudo: yes
+
+  vars:
+    test1: "Hello World"
+
+  tasks:
+    - command: echo {{ item.key }}
+      loop: "{{ query('dict', mydict|default({})) }}"
+      when: item.value > 5
+...
+
+---
+- hosts: all
+  gather_facts: False
+  vars_prompt:
+    - name: "Version"
+      prompt: "Which version Do you want to install?"
+
+  tasks:
+    - name: Ansible prompt example.
+      debug:
+        msg: "{{ Version }}"
+...
+
+---
+- name: This sets up an httpd webserver
+  hosts: all
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: example copying file with owner and permissions
+    copy:
+      src: /opt/test.sh
+      dest: /tmp/test.sh
+      mode: 0644
+  - script: /tmp/test.sh
+...
+
+---
+- hosts: all
+  tasks:
+  - name: Ansible register variable basic example
+    shell: "find *.txt"
+    args:
+      chdir: /Users/mdtutorials2/Documents/Ansible
+    register: find_output
+
+  - debug:
+      var: find_output
+...
+
+---
+- hosts: all
+  tasks:
+  - name: Ansible register with_items example
+    shell: "find *.txt"
+    args:
+      chdir: /Users/mdtutorials2/Documents/Ansible
+    register: with_output
+
+  - shell: "cp {{ item }} {{item}}_bkp"
+    with_items:
+      - "{{ with_output.stdout_lines }}"
+...
+
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+
+    - name: Create database user
+      mysql_user: user=bob password=12345 priv=*.*:ALL state=present
+
+    - name: Create database
+      mysql_db: db=bobdata state=present
+
+    - name: Ensure no user named 'sally' exists and delete if found.
+      mysql_user: user=sally state=absent
+...
+
+---
+- name: Install nginx
+  hosts: host.name.ip
+  become: true
+
+  tasks:
+  - name: Add epel-release repo
+    yum:
+      name: epel-release
+      state: present
+
+  - name: Install nginx
+    yum:
+      name: nginx
+      state: present
+
+  - name: Insert Index Page
+    template:
+      src: index.html
+      dest: /usr/share/nginx/html/index.html
+
+  - name: Start NGiNX
+    service:
+      name: nginx
+      state: started
+...
+
+---
+- hosts: localhost
+  tasks:
+    - debug:
+        msg: play1
+
+- name: Include a play after another play
+  include: otherplays.yml
+...
+
+---
+- hosts: all
+  tasks:
+    - debug:
+        msg: task1
+
+    - name: Include task list in play
+      include: stuff.yaml
+
+    - debug:
+        msg: task10
+...
+
+---
+- hosts: all
+  tasks:
+    - debug:
+        msg: task1
+
+    - name: Include task list in play only if the condition is true
+      include: "{{ hostvar }}.yaml"
+      static: no
+      when: hostvar is defined
+...
+
