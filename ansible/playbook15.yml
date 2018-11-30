@@ -1,0 +1,9 @@
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+      - name: "shut down Centos flavored systems"
+        command: ls
+        when: ansible_os_family == "CentOS"
+...

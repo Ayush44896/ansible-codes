@@ -1,0 +1,24 @@
+---
+  - name: Ensure that Apache is installed
+    yum: name={{web_server}} state=present
+    when: ansible_os_family == "CentOS"
+
+  - name: Start Apache Services
+    service: name={{web_server}} enabled=yes state=started
+
+  - name: Copy contents of index.j2
+    include: play1.yml
+
+  - name: Copy contents of httpd.conf
+    include: plays2.yml
+
+  - name: Register output of shell script
+    include: plays3.yml
+
+  - name: Create group and user
+    include: plays4.yml
+
+  - name: Install git, wget and vim
+    include: plays5.yml
+
+...

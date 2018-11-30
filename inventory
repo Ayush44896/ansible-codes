@@ -1,0 +1,5 @@
+[web]
+192.168.0.69 ansible_user=root ansible_ssh_private_key_file=/etc/nsible_user=root ansible_ssh_private_key_file=/etc/id_rsab
+
+[web: vars]
+username=Ayushred

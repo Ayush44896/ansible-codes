@@ -1,0 +1,5 @@
+  - name: Ansible register variable basic example
+    shell: "find *.txt"
+    args:
+      chdir: /Users/mdtutorials2/Documents/Ansible
+    register: username

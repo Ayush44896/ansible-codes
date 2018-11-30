@@ -1,0 +1,9 @@
+---
+- hosts: web
+  roles:
+    - common
+    - web
+- hosts: win
+  roles:
+    - win
+...

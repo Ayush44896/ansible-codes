@@ -1,0 +1,6 @@
+---
+  - name:  group called “Deloitte”
+    group: name=Deloitte
+  - name: user called "deploy"
+    user: name=deployr group=Deloitte
+...

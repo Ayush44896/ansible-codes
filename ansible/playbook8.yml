@@ -1,0 +1,8 @@
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    git: name=https://github.com/scmgalaxy/ansible-role-template dest=/opt1/ clone=yes
+...

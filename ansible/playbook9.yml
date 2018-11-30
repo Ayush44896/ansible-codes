@@ -1,0 +1,56 @@
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name:  group called “deploy”
+    group: name=deploy
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name:  group called “group”
+    group: name=group
+  - name: Start Apache Services
+    user: name=deploy-user group=group shell=/bin/bash
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    yum: name=httpd state=present
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Start Apache Services
+    service: name=httpd enabled=yes state=started
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Create index.html
+    file: dest=/var/www/html/index.html mode=777 state=touch
+  - name: Add content
+    blockinfile: path=/var/www/html/index.html content=hello
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Install Git
+    yum: name=git state=present
+  - name: Install Wget
+    yum: name=wget state=present
+
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    git: name=https://github.com/scmgalaxy/ansible-role-template dest=/opt1/ clone=yes
+...

@@ -1,0 +1,4 @@
+---
+  - name:  group called “deploy”
+    group: name=deploy
+...

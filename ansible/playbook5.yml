@@ -1,0 +1,10 @@
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name: Create index.html
+    file: dest=/var/www/html/index.html mode=777 state=touch
+  - name: Add content
+    blockinfile: path=/var/www/html/index.html content=hello
+...

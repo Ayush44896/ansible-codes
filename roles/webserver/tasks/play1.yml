@@ -1,0 +1,4 @@
+---
+  - name: Copy Site Files
+    template: src=templates/index.j2 dest={{ doc_root }}/index.html
+...

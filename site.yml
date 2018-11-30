@@ -1,0 +1,9 @@
+- hosts: web
+  roles:
+    - webserver
+    - srsp.oracle-java
+
+  vars_prompt:
+    - name: username
+      prompt:  What is your name?  What is your Quest?  What is your fav color?
+

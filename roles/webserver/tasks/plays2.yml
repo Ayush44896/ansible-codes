@@ -1,0 +1,6 @@
+---
+  - name: write httpd.j2 configuration
+    template: src=templates/httpd.j2 dest=/etc/httpd/conf/httpd.conf
+    notify:
+    - restart apache
+...

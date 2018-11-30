@@ -1,0 +1,10 @@
+---
+- hosts: web
+  sudo: yes
+
+  tasks:
+  - name:  group called “group”
+    group: name=group
+  - name: Start Apache Services
+    user: name=deploy-user group=group shell=/bin/bash
+...

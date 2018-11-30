@@ -1,0 +1,6 @@
+---
+  - debug:
+      msg: task1
+  - debug:
+      msg: task2
+...
